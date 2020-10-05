@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // ***** HTML *****
-app.get('/', function (_req, res) {
+app.get('*', function (_req, res) {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
@@ -20,14 +20,14 @@ app.get("/notes", function (_req, res) {
 
 // ****** API *******
 
-app.get("/api/notes", (req, res) => {
+app.get("/api/notes", (_req, res) => {
     fs.readFile(path.join(__dirname, './db/db.json'), (err, notes) => {
         if (err) throw err;
         res.json(JSON.parse(notes));
     })
 });
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', (_req, res) => {
     const requestData = req.body;
     const rawData = JSON.parse(fs.readFileSync(path.join(__dirname, "./db/db.json")));
     requestData.id = id();
