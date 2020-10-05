@@ -27,7 +27,7 @@ app.get("/api/notes", (_req, res) => {
     })
 });
 
-app.post('/api/notes', (_req, res) => {
+app.post('/api/notes', (req, res) => {
     const requestData = req.body;
     const rawData = JSON.parse(fs.readFileSync(path.join(__dirname, "./db/db.json")));
     requestData.id = id();
