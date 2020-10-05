@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const id = require('uniqid');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -13,7 +14,6 @@ app.get('/', function (_req, res) {
 });
 
 app.get("/notes", function (_req, res) {
-    // console.log('route to note working');
     res.sendFile(path.join(__dirname, "public", "notes.html"));
 });
 
@@ -23,29 +23,36 @@ app.get("/api/notes", (req, res) => {
     fs.readFile(path.join(__dirname, './db/db.json'), (err, notes) => {
         if (err) throw err;
         res.json(JSON.parse(notes));
-        // console.log('api notes is working');
     })
 });
 
 app.post('/api/notes', (req, res) => {
     const requestData = req.body;
     const rawData = JSON.parse(fs.readFileSync(path.join(__dirname, "./db/db.json")));
+    requestData.id = id();
 
     rawData.push(requestData);
-
     const strings = JSON.stringify(rawData);
-
     fs.writeFile('./db/db.json', strings, (err) => {
         if (err) throw err;
     });
-
     res.send(strings);
 });
 
 
-// app.delete('/api/notes/', + 'id', function (req, res) {
+app.delete('/api/notes/:id', function (req, res) {
+    const noteId = req.params.id;
+    const allNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "./db/db.json")));
 
-// })
+    const filter = allNotes.filter((note) => note.id !== noteId);
+    const filtered = JSON.stringify(filter);
+    fs.writeFile('./db/db.json', filtered, (e) => {
+        if (e) throw e;
+    });
+
+    res.send(filtered)
+
+})
 
 app.listen(3000, () => {
     console.log('Server started listening on PORT http://localhost:3000');
