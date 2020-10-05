@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const id = require('uniqid');
 
+const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -54,8 +55,8 @@ app.delete('/api/notes/:id', function (req, res) {
 
 })
 
-app.listen(3000, () => {
-    console.log('Server started listening on PORT http://localhost:3000');
+app.listen(PORT, () => {
+    console.log('Server started listening on PORT http://localhost:3001');
 });
 
 // syntax read and write file in post routes
