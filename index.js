@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // ***** HTML *****
-app.get('*', function (_req, res) {
+app.get('/', function (_req, res) {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
